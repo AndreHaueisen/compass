@@ -22,19 +22,21 @@ class Compass extends StatefulWidget {
 }
 
 class _CompassState extends State<Compass> with TickerProviderStateMixin {
-
   AnimationController cntller;
   var subs;
   var height = 0.0;
+  var lastEvent = 0.0;
 
   void initState() {
     cntller = AnimationController(vsync: this, lowerBound: -3, upperBound: 3);
 
     subs = AeyriumSensor.sensorEvents.listen((SensorEvent event) {
-      cntller.animateTo(event.roll, duration: Duration(milliseconds: 50));
-      height = cntller.value < -2 ? 36 : 0;
+      if((event.roll-lastEvent).abs() > 0.015) {
+        cntller.animateTo(event.roll, duration: Duration(milliseconds: 400), curve: Curves.decelerate);
+        if(event.pitch > 1.45) height = 48;
+      }
+      lastEvent = event.roll;
     });
-
     super.initState();
   }
 
@@ -50,12 +52,9 @@ class _CompassState extends State<Compass> with TickerProviderStateMixin {
     return Scaffold(
         body: Stack(fit: StackFit.expand, children: [
       Image(
-          image: AssetImage(
-            'res/bg.jpeg',
-          ),
+          image: AssetImage('res/bg.jpeg'),
           fit: BoxFit.fitHeight),
-      Center(
-          child: Container(
+      Center(child: Container(
               height: width,
               width: width,
               padding: EdgeInsets.all(48),
@@ -76,13 +75,12 @@ class _CompassState extends State<Compass> with TickerProviderStateMixin {
                             ),
                             AnimatedSize(
                               vsync: this,
-                              duration: Duration(seconds: 9),
+                              duration: Duration(seconds: 4),
+                              curve: Curves.elasticIn,
                               child: Image(
-                                image: AssetImage('res/logo.png'),
+                                image: AssetImage('res/eg.png'),
                                 height: height,
-                              ),
-                            )
-                          ]))))))]));
+                              ))]))))))]));
   }
 }
 
@@ -124,7 +122,6 @@ class StarPainter extends CustomPainter {
       pTxt.paint(cavs, Offset(-pTxt.width / 2, -(pTxt.height / 2) - 18));
 
       cavs.restore();
-
       cavs.rotate(2 * pi / 8);
       cavs.drawPath(pth1, pDark);
     }
@@ -132,7 +129,6 @@ class StarPainter extends CustomPainter {
     cavs.restore();
   }
 
-  @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     return true;
   }

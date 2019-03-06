@@ -1,16 +1,17 @@
-# compass
+# Compass
 
-A new Flutter application.
+This app simulates a compass and was created specifically for the Flutter Create challenge.
 
-## Getting Started
+![sample](images/screen_shot.png)
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Using it
 
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
+Run the application preferably on a physical device. It uses the magnetometer's
+output to animate the rotation. It depends on [aeyrium_sensor](https://pub.dartlang.org/packages/aeyrium_sensor). 
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Dart file size measured was 5098 bytes. Some variable names, commas and override
+annotations where shortened or removed to reduce the file size.
+Everything was done on a single file to reduce size.
+
+There is a easter bird hidden in there :)
